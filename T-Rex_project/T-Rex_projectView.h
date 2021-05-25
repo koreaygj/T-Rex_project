@@ -40,6 +40,10 @@ protected:
 // 생성된 메시지 맵 함수
 protected:
 	DECLARE_MESSAGE_MAP()
+public:
+	afx_msg void OnPaint();
+	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
+	CPoint m_pos;
 };
 
 #ifndef _DEBUG  // T-Rex_projectView.cpp의 디버그 버전

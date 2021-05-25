@@ -73,7 +73,10 @@ BOOL CMainFrame::PreCreateWindow(CREATESTRUCT& cs)
 		return FALSE;
 	// TODO: CREATESTRUCT cs를 수정하여 여기에서
 	//  Window 클래스 또는 스타일을 수정합니다.
-
+	cs.cx = 1080;//가로 크기
+	cs.cy = 500;//세로 크기
+	cs.style &= ~WS_THICKFRAME;//창 크기 조절 기능 비활성화
+	cs.style &= ~WS_MAXIMIZEBOX;//창 최대화버튼 비활성화
 	return TRUE;
 }
 

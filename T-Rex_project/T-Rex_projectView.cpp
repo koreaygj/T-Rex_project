@@ -27,6 +27,8 @@ BEGIN_MESSAGE_MAP(CTRexprojectView, CView)
 	ON_COMMAND(ID_FILE_PRINT, &CView::OnFilePrint)
 	ON_COMMAND(ID_FILE_PRINT_DIRECT, &CView::OnFilePrint)
 	ON_COMMAND(ID_FILE_PRINT_PREVIEW, &CView::OnFilePrintPreview)
+	ON_WM_PAINT()
+	ON_WM_MOUSEMOVE()
 END_MESSAGE_MAP()
 
 // CTRexprojectView 생성/소멸
@@ -51,14 +53,14 @@ BOOL CTRexprojectView::PreCreateWindow(CREATESTRUCT& cs)
 
 // CTRexprojectView 그리기
 
-void CTRexprojectView::OnDraw(CDC* /*pDC*/)
+void CTRexprojectView::OnDraw(CDC* pDC)
 {
 	CTRexprojectDoc* pDoc = GetDocument();
 	ASSERT_VALID(pDoc);
 	if (!pDoc)
 		return;
 
-	// TODO: 여기에 원시 데이터에 대한 그리기 코드를 추가합니다.
+	pDC->TextOutW(10, 10, _T("게임을 시작하려면 space bar 게임을 나오려면 q를 눌러주세요."));
 }
 
 
@@ -103,3 +105,33 @@ CTRexprojectDoc* CTRexprojectView::GetDocument() const // 디버그되지 않은
 
 
 // CTRexprojectView 메시지 처리기
+
+
+void CTRexprojectView::OnPaint()
+{
+	
+	CPaintDC dc(this);
+	CRect rect;
+	GetClientRect(&rect);
+	CPen pen, * oldpen;
+	pen.CreatePen(PS_DASH, 1, RGB(0, 0, 0));
+	oldpen = dc.SelectObject(&pen);
+	dc.MoveTo(10, 380);
+	dc.LineTo(1080, 380);
+	
+	//마우스 포인터 위치 출력용 (공룡게임과 무관)
+	CString str;
+	str.Format(L"x = %d, y = %d", m_pos.x, m_pos.y);
+	dc.TextOut(m_pos.x- 100, m_pos.y, str);
+}
+
+
+void CTRexprojectView::OnMouseMove(UINT nFlags, CPoint point)
+{
+	//마우스 포인터 위치 춮력용 (공룡게임과 무관)
+	CClientDC dc(this);
+	m_pos = point;
+	Invalidate();
+	
+	CView::OnMouseMove(nFlags, point);
+}
