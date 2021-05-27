@@ -77,5 +77,26 @@
     <Image Include="res\Toolbar.bmp">
       <Filter>리소스 파일</Filter>
     </Image>
+    <Image Include="res\bitmap1.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\bitmap2.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="..\..\..\..\Desktop\cbnu 2-1\객체지향\image\KakaoTalk_20210527_024917800_02.png">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="..\..\..\..\Desktop\cbnu 2-1\객체지향\image\Game over.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="..\..\..\..\Desktop\cbnu 2-1\객체지향\image\player1.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="..\..\..\..\Desktop\cbnu 2-1\객체지향\image\playre2.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="..\..\..\..\desktop\cbnu 2-1\객체지향\image\bitmap1.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
   </ItemGroup>
 </Project>

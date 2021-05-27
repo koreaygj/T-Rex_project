@@ -157,6 +157,8 @@ protected:
 // 구현입니다.
 protected:
 	DECLARE_MESSAGE_MAP()
+public:
+//	bool m_stop;
 };
 
 CAboutDlg::CAboutDlg() noexcept : CDialogEx(IDD_ABOUTBOX)

@@ -44,6 +44,16 @@ public:
 	afx_msg void OnPaint();
 	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
 	CPoint m_pos;
+	afx_msg void OnTimer(UINT_PTR nIDEvent);
+	afx_msg void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
+	void BottomLimit();
+	void jumping();
+	void jump();
+	BOOL m_stop;
+	BOOL m_jump;
+	BOOL m_bottom;
+	int m_dino_x;
+	int m_dino_y;
 };
 
 #ifndef _DEBUG  // T-Rex_projectView.cpp의 디버그 버전

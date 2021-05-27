@@ -211,6 +211,13 @@
     <None Include="res\TRexproject.rc2" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="..\..\..\..\desktop\cbnu 2-1\객체지향\image\bitmap1.bmp" />
+    <Image Include="..\..\..\..\Desktop\cbnu 2-1\객체지향\image\Game over.bmp" />
+    <Image Include="..\..\..\..\Desktop\cbnu 2-1\객체지향\image\KakaoTalk_20210527_024917800_02.png" />
+    <Image Include="..\..\..\..\Desktop\cbnu 2-1\객체지향\image\player1.bmp" />
+    <Image Include="..\..\..\..\Desktop\cbnu 2-1\객체지향\image\playre2.bmp" />
+    <Image Include="res\bitmap1.bmp" />
+    <Image Include="res\bitmap2.bmp" />
     <Image Include="res\T-Rex_project.ico" />
     <Image Include="res\T-Rex_projectDoc.ico" />
     <Image Include="res\Toolbar.bmp" />

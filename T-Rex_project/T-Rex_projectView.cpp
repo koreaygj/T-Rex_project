@@ -16,7 +16,7 @@
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
-
+#define bottom 290
 
 // CTRexprojectView
 
@@ -29,6 +29,8 @@ BEGIN_MESSAGE_MAP(CTRexprojectView, CView)
 	ON_COMMAND(ID_FILE_PRINT_PREVIEW, &CView::OnFilePrintPreview)
 	ON_WM_PAINT()
 	ON_WM_MOUSEMOVE()
+	ON_WM_TIMER()
+	ON_WM_KEYDOWN()
 END_MESSAGE_MAP()
 
 // CTRexprojectView 생성/소멸
@@ -37,6 +39,8 @@ CTRexprojectView::CTRexprojectView() noexcept
 {
 	// TODO: 여기에 생성 코드를 추가합니다.
 
+	m_dino_x = 0;
+	m_dino_y = 0;
 }
 
 CTRexprojectView::~CTRexprojectView()
@@ -135,3 +139,97 @@ void CTRexprojectView::OnMouseMove(UINT nFlags, CPoint point)
 	
 	CView::OnMouseMove(nFlags, point);
 }
+
+void CTRexprojectView::BottomLimit()
+{
+	if (m_dino_y <= bottom) {
+		m_dino_y = bottom;
+		m_bottom = true;
+	}
+	if (m_dino_y >= bottom - 100) {
+		m_jump = false;
+	}
+}
+void CTRexprojectView::OnTimer(UINT_PTR nIDEvent)
+{
+	CView::OnTimer(nIDEvent);
+	//player 움직임 구현
+	static int ncount = 0;
+	m_dino_x = 40;
+	m_dino_y = bottom;
+	CString score;	
+	CClientDC dc(this);
+	CDC memDC1; memDC1.CreateCompatibleDC(&dc);
+	CDC memDC2; memDC2.CreateCompatibleDC(&dc);
+	int i_key = (ncount/5) % 2;
+	CBitmap bmpPlayer1;
+	bmpPlayer1.LoadBitmap(IDB_Player1);
+	CBitmap bmpPlayer2;
+	bmpPlayer2.LoadBitmap(IDB_Player2);
+		jump();
+		BottomLimit();
+		switch (i_key) 
+		{
+			//Player1 비트맵 불러오기
+			case 0:
+			{
+			memDC1.SelectObject(&bmpPlayer1);
+			dc.BitBlt(m_dino_x,m_dino_y, 80, 80, &memDC1, 0, 0, SRCCOPY);
+			memDC1.DeleteDC();
+			bmpPlayer1.DeleteObject();
+			++ncount;
+			break;
+			}
+			//Player2 비트맵 불러오기
+			case 1:
+			{
+			memDC2.SelectObject(&bmpPlayer2);
+			dc.BitBlt(m_dino_x, m_dino_y, 80, 80, &memDC2, 0, 0, SRCCOPY);
+			memDC2.DeleteDC();
+			bmpPlayer2.DeleteObject();
+			++ncount;
+			break;
+			}
+		}
+		//BottomLimit();
+		score.Format(_T("%d"), (ncount / 10) );
+		dc.TextOutW(900, 10, _T("Score :   ") + score);
+		
+
+}
+
+void CTRexprojectView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
+{
+	//아무 키보드 누르면 player 출력
+	
+	if (nChar != 0)
+	{
+		SetTimer(0, 0, NULL);//timer 시작
+		nChar = NULL;
+	}
+	else if (nChar == VK_SPACE) {
+		jumping();
+		jump();
+		BottomLimit();
+		nChar = NULL;
+	}
+	CView::OnKeyDown(nChar, nRepCnt, nFlags);
+}
+void CTRexprojectView::jumping() {
+	if (m_bottom && !m_jump)
+	{
+		m_jump = true;
+		m_bottom = false;
+	}
+}
+void CTRexprojectView::jump() {
+	if (m_jump) {
+		m_dino_y -= 5;
+	}
+	else {
+		m_dino_y += 5;
+	}
+}
+//void CTRexprojectView::Score() {
+//}
+
