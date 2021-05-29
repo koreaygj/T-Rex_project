@@ -46,14 +46,24 @@ public:
 	CPoint m_pos;
 	afx_msg void OnTimer(UINT_PTR nIDEvent);
 	afx_msg void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
-	void BottomLimit();
 	void jumping();
-	void jump();
+	void Moving();
+	void Gamestart();
+	void Player1();
+	void Player2();
 	BOOL m_stop;
 	BOOL m_jump;
 	BOOL m_bottom;
+	BOOL m_startsignal;
+	BOOL m_Gameover;
+	BOOL m_jumpsignal;
 	int m_dino_x;
 	int m_dino_y;
+	CString m_score;
+	int m_ncount;
+	int m_test;
+	float m_frame, m_framespeed;
+	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
 };
 
 #ifndef _DEBUG  // T-Rex_projectView.cpp의 디버그 버전

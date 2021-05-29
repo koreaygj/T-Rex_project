@@ -12,12 +12,13 @@
 
 #include "T-Rex_projectDoc.h"
 #include "T-Rex_projectView.h"
-
+#include "windows.h"
+#pragma comment(lib, "winmm.lib")
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
-#define bottom 290
-
+#define bottom 300
+#define start 40
 // CTRexprojectView
 
 IMPLEMENT_DYNCREATE(CTRexprojectView, CView)
@@ -31,6 +32,8 @@ BEGIN_MESSAGE_MAP(CTRexprojectView, CView)
 	ON_WM_MOUSEMOVE()
 	ON_WM_TIMER()
 	ON_WM_KEYDOWN()
+	ON_WM_CREATE()
+	ON_WM_LBUTTONDOWN()
 END_MESSAGE_MAP()
 
 // CTRexprojectView 생성/소멸
@@ -39,8 +42,14 @@ CTRexprojectView::CTRexprojectView() noexcept
 {
 	// TODO: 여기에 생성 코드를 추가합니다.
 
-	m_dino_x = 0;
-	m_dino_y = 0;
+	m_dino_x = start;
+	m_dino_y = 300;
+	m_ncount = 0;
+	m_test = 0;
+	m_frame = 0.f;
+	m_framespeed = 0.4f;
+	m_jump = false;
+	m_bottom = true;
 }
 
 CTRexprojectView::~CTRexprojectView()
@@ -113,7 +122,7 @@ CTRexprojectDoc* CTRexprojectView::GetDocument() const // 디버그되지 않은
 
 void CTRexprojectView::OnPaint()
 {
-	
+	//바닥
 	CPaintDC dc(this);
 	CRect rect;
 	GetClientRect(&rect);
@@ -122,7 +131,6 @@ void CTRexprojectView::OnPaint()
 	oldpen = dc.SelectObject(&pen);
 	dc.MoveTo(10, 380);
 	dc.LineTo(1080, 380);
-	
 	//마우스 포인터 위치 출력용 (공룡게임과 무관)
 	CString str;
 	str.Format(L"x = %d, y = %d", m_pos.x, m_pos.y);
@@ -140,96 +148,115 @@ void CTRexprojectView::OnMouseMove(UINT nFlags, CPoint point)
 	CView::OnMouseMove(nFlags, point);
 }
 
-void CTRexprojectView::BottomLimit()
-{
-	if (m_dino_y <= bottom) {
-		m_dino_y = bottom;
-		m_bottom = true;
-	}
-	if (m_dino_y >= bottom - 100) {
-		m_jump = false;
-	}
-}
 void CTRexprojectView::OnTimer(UINT_PTR nIDEvent)
 {
 	CView::OnTimer(nIDEvent);
-	//player 움직임 구현
-	static int ncount = 0;
-	m_dino_x = 40;
-	m_dino_y = bottom;
-	CString score;	
+	static int ncount;
 	CClientDC dc(this);
-	CDC memDC1; memDC1.CreateCompatibleDC(&dc);
-	CDC memDC2; memDC2.CreateCompatibleDC(&dc);
-	int i_key = (ncount/5) % 2;
-	CBitmap bmpPlayer1;
-	bmpPlayer1.LoadBitmap(IDB_Player1);
-	CBitmap bmpPlayer2;
-	bmpPlayer2.LoadBitmap(IDB_Player2);
-		jump();
-		BottomLimit();
-		switch (i_key) 
-		{
-			//Player1 비트맵 불러오기
-			case 0:
-			{
-			memDC1.SelectObject(&bmpPlayer1);
-			dc.BitBlt(m_dino_x,m_dino_y, 80, 80, &memDC1, 0, 0, SRCCOPY);
-			memDC1.DeleteDC();
-			bmpPlayer1.DeleteObject();
-			++ncount;
-			break;
-			}
-			//Player2 비트맵 불러오기
-			case 1:
-			{
-			memDC2.SelectObject(&bmpPlayer2);
-			dc.BitBlt(m_dino_x, m_dino_y, 80, 80, &memDC2, 0, 0, SRCCOPY);
-			memDC2.DeleteDC();
-			bmpPlayer2.DeleteObject();
-			++ncount;
-			break;
-			}
-		}
-		//BottomLimit();
-		score.Format(_T("%d"), (ncount / 10) );
-		dc.TextOutW(900, 10, _T("Score :   ") + score);
-		
+	Moving();
+	m_score.Format(_T("%d"), (ncount++ / 10));
+	dc.TextOutW(900, 10, _T("Score :   ") + m_score);
+	m_test = _ttoi(m_score);
+	if (m_test == 100)m_Gameover = false;
 
 }
 
 void CTRexprojectView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
-	//아무 키보드 누르면 player 출력
-	
-	if (nChar != 0)
+
+	Gamestart();
+	SetTimer(0, 7, NULL);
+	switch (nChar)
 	{
-		SetTimer(0, 0, NULL);//timer 시작
-		nChar = NULL;
+	case VK_SPACE:
+		m_jump = true;
+		break;
+	case VK_UP:
+		m_jump = true;
+		break;
+	case VK_CONTROL:
+		break;
+	default:
+		m_jump = false;
+		break;
 	}
-	else if (nChar == VK_SPACE) {
-		jumping();
-		jump();
-		BottomLimit();
-		nChar = NULL;
-	}
+
 	CView::OnKeyDown(nChar, nRepCnt, nFlags);
 }
+//점프 함수
 void CTRexprojectView::jumping() {
-	if (m_bottom && !m_jump)
-	{
-		m_jump = true;
-		m_bottom = false;
-	}
-}
-void CTRexprojectView::jump() {
-	if (m_jump) {
-		m_dino_y -= 5;
-	}
-	else {
-		m_dino_y += 5;
-	}
-}
-//void CTRexprojectView::Score() {
-//}
+		if (m_dino_y > bottom) {
+			m_dino_y = bottom;
+			m_bottom = true;
+		}
+		if (m_dino_y < bottom - 100) {
+			m_jump = false;
+		}
+		else if (m_dino_y <bottom && m_dino_y >bottom - 100)m_startsignal = false;
+		if (m_jump) {
+			m_dino_y -= 5;
+		}
+		else {
+			m_dino_y += 5;
+		}
+		
 
+}
+//Player 움직임 구현
+void CTRexprojectView::Moving() {
+	static int m_ncount = 0;
+	const int changeframe = 5;
+	m_frame += m_framespeed;
+	if (m_startsignal)
+	{
+		jumping();
+	}
+	if (m_frame >= changeframe)
+	{
+		m_frame -= changeframe;
+		++m_ncount;
+		if (m_ncount >= 2) { m_ncount = 0; }
+	}
+	if (m_ncount == 0)
+	{
+		Player1();
+	}
+	else
+	{
+		Player2();
+	}
+}
+//점수 시작하는 함수
+void CTRexprojectView::Gamestart() {
+		SetTimer(0, 7, NULL);
+}
+//Player 1 비트맵 불러오기
+void CTRexprojectView::Player1() {
+	CClientDC dc(this);
+	CBitmap bmpPlayer1;
+	bmpPlayer1.LoadBitmap(IDB_Player1);
+	CDC memDC1; memDC1.CreateCompatibleDC(&dc);
+	memDC1.SelectObject(&bmpPlayer1);
+	dc.BitBlt(m_dino_x, m_dino_y, 80, 80, &memDC1, 0, 0, SRCCOPY);
+	memDC1.DeleteDC();
+	bmpPlayer1.DeleteObject();
+}
+//Player 2 비트맵 불러오기
+void CTRexprojectView::Player2() {
+	CClientDC dc(this);
+	CBitmap bmpPlayer2;
+	bmpPlayer2.LoadBitmap(IDB_Player2);
+	CDC memDC2; memDC2.CreateCompatibleDC(&dc);
+	memDC2.SelectObject(&bmpPlayer2);
+	dc.BitBlt(m_dino_x, m_dino_y, 80, 80, &memDC2, 0, 0, SRCCOPY);
+	memDC2.DeleteDC();
+	bmpPlayer2.DeleteObject();
+
+}
+
+void CTRexprojectView::OnLButtonDown(UINT nFlags, CPoint point)
+{
+	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
+	m_jump = true;
+	CView::OnLButtonDown(nFlags, point);
+}
