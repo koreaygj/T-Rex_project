@@ -260,3 +260,6 @@ void CTRexprojectView::OnLButtonDown(UINT nFlags, CPoint point)
 	m_jump = true;
 	CView::OnLButtonDown(nFlags, point);
 }
+
+
+// TODO: Server Build&Git Test_Chadonghyeon.
