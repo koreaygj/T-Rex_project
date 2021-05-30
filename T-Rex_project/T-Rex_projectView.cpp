@@ -259,32 +259,11 @@ void CTRexprojectView::Player2() {
 }
 //Tree 비트맵 불러오기
 
-void CTRexprojectView::Tree1() {
-	CClientDC dc(this);
-	CBitmap bmpTree1;
-	bmpTree1.LoadBitmapW(IDB_Tree1);
-	CDC treeDC1; treeDC1.CreateCompatibleDC(&dc);
-	treeDC1.SelectObject(&bmpTree1);
-	dc.BitBlt(m_tree_x, m_tree_y, 54, 59, &treeDC1, 0, 0, SRCCOPY);
-	treeDC1.DeleteDC();
-	bmpTree1.DeleteObject();
 }
-//장애물 움직임 구현
-void CTRexprojectView::HuddleMove() {
-	int speed = 0;
-	speed = (m_Huddlespeed/80) % 3;
-	switch (speed) {
-	case 0:
-		m_tree_x -= 5;
-		break;
-	case 1:
-		m_tree_x -= 6;
-		break;
-	case 2:
-		m_tree_x -= 7;
-		break;
-	}
-	if (m_tree_x == 0)
-		m_tree_x = 1080;
-	Tree1();
+
+void CTRexprojectView::OnLButtonDown(UINT nFlags, CPoint point)
+{
+	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
+	m_jump = true;
+	CView::OnLButtonDown(nFlags, point);
 }
