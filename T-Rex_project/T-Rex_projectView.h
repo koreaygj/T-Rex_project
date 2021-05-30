@@ -51,19 +51,24 @@ public:
 	void Gamestart();
 	void Player1();
 	void Player2();
+	void Tree1();
+	void HuddleMove();
 	BOOL m_stop;
 	BOOL m_jump;
 	BOOL m_bottom;
 	BOOL m_startsignal;
 	BOOL m_Gameover;
 	BOOL m_jumpsignal;
+	BOOL m_nodouble;
+	BOOL m_Huddlesignal;
 	int m_dino_x;
 	int m_dino_y;
+	int m_tree_x, m_tree_y;
 	CString m_score;
 	int m_ncount;
-	int m_test;
+	int m_Huddlespeed;
+	int m_Timer;
 	float m_frame, m_framespeed;
-	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
 };
 
 #ifndef _DEBUG  // T-Rex_projectView.cpp의 디버그 버전

@@ -45,11 +45,13 @@ CTRexprojectView::CTRexprojectView() noexcept
 	m_dino_x = start;
 	m_dino_y = 300;
 	m_ncount = 0;
-	m_test = 0;
+	m_Huddlespeed = 0;
 	m_frame = 0.f;
 	m_framespeed = 0.4f;
 	m_jump = false;
 	m_bottom = true;
+	m_Huddlesignal = false;
+	m_tree_x = 1000;m_tree_y = 320;
 }
 
 CTRexprojectView::~CTRexprojectView()
@@ -152,20 +154,20 @@ void CTRexprojectView::OnTimer(UINT_PTR nIDEvent)
 {
 	CView::OnTimer(nIDEvent);
 	static int ncount;
+	static int huddle;
+	int huddlespeed;
 	CClientDC dc(this);
 	Moving();
+	HuddleMove();
 	m_score.Format(_T("%d"), (ncount++ / 10));
 	dc.TextOutW(900, 10, _T("Score :   ") + m_score);
-	m_test = _ttoi(m_score);
-	if (m_test == 100)m_Gameover = false;
 
 }
 
 void CTRexprojectView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
-
+	m_startsignal = true;
 	Gamestart();
-	SetTimer(0, 7, NULL);
 	switch (nChar)
 	{
 	case VK_SPACE:
@@ -185,36 +187,36 @@ void CTRexprojectView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 }
 //점프 함수
 void CTRexprojectView::jumping() {
+		if (m_jump && !m_bottom)
+		{
+			m_jump == true;
+			m_bottom == false;
+		}
 		if (m_dino_y > bottom) {
 			m_dino_y = bottom;
 			m_bottom = true;
 		}
-		if (m_dino_y < bottom - 100) {
+		if (m_dino_y < bottom - 150) {
 			m_jump = false;
 		}
-		else if (m_dino_y <bottom && m_dino_y >bottom - 100)m_startsignal = false;
 		if (m_jump) {
 			m_dino_y -= 5;
 		}
 		else {
 			m_dino_y += 5;
 		}
-		
-
 }
 //Player 움직임 구현
 void CTRexprojectView::Moving() {
 	static int m_ncount = 0;
 	const int changeframe = 5;
 	m_frame += m_framespeed;
-	if (m_startsignal)
-	{
-		jumping();
-	}
+	jumping();
 	if (m_frame >= changeframe)
 	{
 		m_frame -= changeframe;
 		++m_ncount;
+		++m_Huddlespeed;
 		if (m_ncount >= 2) { m_ncount = 0; }
 	}
 	if (m_ncount == 0)
@@ -228,6 +230,7 @@ void CTRexprojectView::Moving() {
 }
 //점수 시작하는 함수
 void CTRexprojectView::Gamestart() {
+	if(m_startsignal == true)
 		SetTimer(0, 7, NULL);
 }
 //Player 1 비트맵 불러오기
@@ -237,7 +240,8 @@ void CTRexprojectView::Player1() {
 	bmpPlayer1.LoadBitmap(IDB_Player1);
 	CDC memDC1; memDC1.CreateCompatibleDC(&dc);
 	memDC1.SelectObject(&bmpPlayer1);
-	dc.BitBlt(m_dino_x, m_dino_y, 80, 80, &memDC1, 0, 0, SRCCOPY);
+	//dc.BitBlt(m_dino_x, m_dino_y, 80, 80, &memDC1, 0, 80, SRCCOPY);
+	dc.BitBlt(m_dino_x, m_dino_y, 80, 160, &memDC1, 0, 0, SRCCOPY);
 	memDC1.DeleteDC();
 	bmpPlayer1.DeleteObject();
 }
@@ -248,15 +252,39 @@ void CTRexprojectView::Player2() {
 	bmpPlayer2.LoadBitmap(IDB_Player2);
 	CDC memDC2; memDC2.CreateCompatibleDC(&dc);
 	memDC2.SelectObject(&bmpPlayer2);
-	dc.BitBlt(m_dino_x, m_dino_y, 80, 80, &memDC2, 0, 0, SRCCOPY);
+	//dc.BitBlt(m_dino_x, m_dino_y, 80, 80, &memDC2, 0, 80, SRCCOPY);
+	dc.BitBlt(m_dino_x, m_dino_y, 80, 160, &memDC2, 0, 0, SRCCOPY);
 	memDC2.DeleteDC();
 	bmpPlayer2.DeleteObject();
-
 }
+//Tree 비트맵 불러오기
 
-void CTRexprojectView::OnLButtonDown(UINT nFlags, CPoint point)
-{
-	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
-	m_jump = true;
-	CView::OnLButtonDown(nFlags, point);
+void CTRexprojectView::Tree1() {
+	CClientDC dc(this);
+	CBitmap bmpTree1;
+	bmpTree1.LoadBitmapW(IDB_Tree1);
+	CDC treeDC1; treeDC1.CreateCompatibleDC(&dc);
+	treeDC1.SelectObject(&bmpTree1);
+	dc.BitBlt(m_tree_x, m_tree_y, 54, 59, &treeDC1, 0, 0, SRCCOPY);
+	treeDC1.DeleteDC();
+	bmpTree1.DeleteObject();
+}
+//장애물 움직임 구현
+void CTRexprojectView::HuddleMove() {
+	int speed = 0;
+	speed = (m_Huddlespeed/80) % 3;
+	switch (speed) {
+	case 0:
+		m_tree_x -= 5;
+		break;
+	case 1:
+		m_tree_x -= 6;
+		break;
+	case 2:
+		m_tree_x -= 7;
+		break;
+	}
+	if (m_tree_x == 0)
+		m_tree_x = 1080;
+	Tree1();
 }

@@ -98,5 +98,20 @@
     <Image Include="..\..\..\..\desktop\cbnu 2-1\객체지향\image\bitmap1.bmp">
       <Filter>리소스 파일</Filter>
     </Image>
+    <Image Include="..\..\..\..\Desktop\cbnu 2-1\객체지향\image\KakaoTalk_20210529_215640021_01.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="..\..\..\..\Desktop\cbnu 2-1\객체지향\image\KakaoTalk_20210529_215640021.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="..\..\..\..\Desktop\cbnu 2-1\객체지향\image\KakaoTalk_20210529_215640021_02.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="..\..\..\..\Desktop\cbnu 2-1\객체지향\image\tree.png">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="..\..\..\..\Desktop\cbnu 2-1\객체지향\image\tree.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
   </ItemGroup>
 </Project>
