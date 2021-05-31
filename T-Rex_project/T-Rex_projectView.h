@@ -63,7 +63,7 @@ public:
 	BOOL m_jumpsignal;
 	BOOL m_nodouble;
 	BOOL m_Huddlesignal;
-	BOOL m_Gameover_x;
+	BOOL m_Gameover_x1, m_Gameover_x2;
 	BOOL m_Gameover_y;
 	BOOL m_Gameover;
 	int m_dino_x;

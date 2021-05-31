@@ -9,15 +9,15 @@
 #define IDB_Eraser                      316
 #define IDB_Player1                     317
 #define IDB_Player2                     318
-#define IDB_Gameover                    319
-#define IDB_Gameover_p                  319
 #define IDB_Tree1                       322
+#define IDB_BITMAP1                     325
+#define IDB_Gameover_p                  325
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        323
+#define _APS_NEXT_RESOURCE_VALUE        326
 #define _APS_NEXT_COMMAND_VALUE         32771
 #define _APS_NEXT_CONTROL_VALUE         1000
 #define _APS_NEXT_SYMED_VALUE           310

@@ -113,5 +113,8 @@
     <Image Include="..\..\..\..\Desktop\cbnu 2-1\객체지향\image\tree.bmp">
       <Filter>리소스 파일</Filter>
     </Image>
+    <Image Include="..\..\..\..\desktop\cbnu 2-1\객체지향\image\bmp00001.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
   </ItemGroup>
 </Project>

@@ -181,6 +181,7 @@ void CTRexprojectView::OnTimer(UINT_PTR nIDEvent)
 		dc.TextOutW(500, 175, _T("Gameover"));
 		dc.TextOutW(500, 195, _T("Your score: ") + m_score);
 		GameoverPlayer();
+		Tree1();
 		KillTimer(0);
 	}
 }
@@ -189,21 +190,26 @@ void CTRexprojectView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
 	m_startsignal = true;
 	Gamestart();
-	switch (nChar)
+	if (m_Gameover == false)
 	{
-	case VK_SPACE:
-		m_jump = true;
-		break;
-	case VK_UP:
-		m_jump = true;
-		break;
-	case VK_CONTROL:
-		break;
-	default:
-		m_jump = false;
-		break;
+		switch (nChar)
+		{
+		case VK_SPACE:
+			m_jump = true;
+			break;
+		case VK_UP:
+			m_jump = true;
+			break;
+		case VK_CONTROL:
+			break;
+		default:
+			m_jump = false;
+			break;
+		}
 	}
-
+	else {
+		//스코어 보드 보여주기
+	}
 	CView::OnKeyDown(nChar, nRepCnt, nFlags);
 }
 //점프 함수
@@ -328,13 +334,16 @@ void CTRexprojectView::HuddleMove() {
 }
 //충돌 알고리즘
 BOOL CTRexprojectView::CollisionAlgorithm() {
-	m_Gameover_x = false;
+	m_Gameover_x1 = false;
+	m_Gameover_x2 = false;
 	m_Gameover_y = false;
 	if ((m_dino_x + 3) < (m_tree_x + 27) && (m_dino_x + 58) > m_tree_x)
-		m_Gameover_x = true;
+		m_Gameover_x1 = true;
+	if ((m_dino_x + 58) > m_tree_x && (m_dino_x + 3) < m_tree_x + 27)
+		m_Gameover_x2 = true;
 	if ((m_dino_y - 73) < m_tree_y && m_dino_y > (m_tree_y - 59))
 		m_Gameover_y = true;
-	if (m_Gameover_x && m_Gameover_y) {
+	if (m_Gameover_x1 &&m_Gameover_x2 && m_Gameover_y) {
 		m_Gameover = true;
 	}
 		return true;
