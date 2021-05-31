@@ -10,7 +10,7 @@
 #define IDB_Player1                     317
 #define IDB_Player2                     318
 #define IDB_Gameover                    319
-#define IDB_BITMAP1                     322
+#define IDB_Gameover_p                  319
 #define IDB_Tree1                       322
 
 // Next default values for new objects

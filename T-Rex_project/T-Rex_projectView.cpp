@@ -52,6 +52,7 @@ CTRexprojectView::CTRexprojectView() noexcept
 	m_bottom = true;
 	m_Huddlesignal = false;
 	m_tree_x = 1000;m_tree_y = 320;
+	m_Gameover = false;
 }
 
 CTRexprojectView::~CTRexprojectView()
@@ -124,21 +125,34 @@ CTRexprojectDoc* CTRexprojectView::GetDocument() const // 디버그되지 않은
 
 void CTRexprojectView::OnPaint()
 {
-	//바닥
-	CPaintDC dc(this);
-	CRect rect;
-	GetClientRect(&rect);
-	CPen pen, * oldpen;
-	pen.CreatePen(PS_DASH, 1, RGB(0, 0, 0));
-	oldpen = dc.SelectObject(&pen);
-	dc.MoveTo(10, 380);
-	dc.LineTo(1080, 380);
+	Line();
 	//마우스 포인터 위치 출력용 (공룡게임과 무관)
+	CClientDC dc(this);
 	CString str;
 	str.Format(L"x = %d, y = %d", m_pos.x, m_pos.y);
 	dc.TextOut(m_pos.x- 100, m_pos.y, str);
 }
 
+void CTRexprojectView::Line() {
+	//바닥
+	CPaintDC dc(this);
+	CRect rect;
+	GetClientRect(&rect);
+	CPen pen, pen2, * oldpen, * oldpen2;
+	pen.CreatePen(PS_DASH, 1, RGB(0, 0, 0));
+	pen2.CreatePen(PS_SOLID, 3, RGB(0, 0, 0));
+	oldpen = dc.SelectObject(&pen);
+	dc.MoveTo(15, 380);
+	dc.LineTo(1070, 380);
+	pen.DeleteObject();
+	oldpen2 = dc.SelectObject(&pen2);
+	dc.MoveTo(5, 5);
+	dc.LineTo(5, 385);
+	dc.LineTo(1055, 385);
+	dc.LineTo(1055, 5);
+	dc.LineTo(5, 5);
+	pen.DeleteObject();
+}
 
 void CTRexprojectView::OnMouseMove(UINT nFlags, CPoint point)
 {
@@ -155,13 +169,20 @@ void CTRexprojectView::OnTimer(UINT_PTR nIDEvent)
 	CView::OnTimer(nIDEvent);
 	static int ncount;
 	static int huddle;
-	int huddlespeed;
 	CClientDC dc(this);
+	Line();
 	Moving();
 	HuddleMove();
+	CollisionAlgorithm();
 	m_score.Format(_T("%d"), (ncount++ / 10));
 	dc.TextOutW(900, 10, _T("Score :   ") + m_score);
-
+	if (m_Gameover == true)
+	{
+		dc.TextOutW(500, 175, _T("Gameover"));
+		dc.TextOutW(500, 195, _T("Your score: ") + m_score);
+		GameoverPlayer();
+		KillTimer(0);
+	}
 }
 
 void CTRexprojectView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
@@ -259,11 +280,62 @@ void CTRexprojectView::Player2() {
 }
 //Tree 비트맵 불러오기
 
+void CTRexprojectView::Tree1() {
+	CClientDC dc(this);
+	CBitmap bmpTree1;
+	bmpTree1.LoadBitmapW(IDB_Tree1);
+	CDC treeDC1; treeDC1.CreateCompatibleDC(&dc);
+	treeDC1.SelectObject(&bmpTree1);
+	dc.BitBlt(m_tree_x, m_tree_y, 54, 59, &treeDC1, 0, 0, SRCCOPY);
+	treeDC1.DeleteDC();
+	bmpTree1.DeleteObject();
 }
+//Gameover 비트맵 불러오기
+void CTRexprojectView::GameoverPlayer(){
+	CClientDC dc(this);
+	CBitmap bmpGameover_p;
+	bmpGameover_p.LoadBitmapW(IDB_Gameover_p);
+	CDC Gameover_p; Gameover_p.CreateCompatibleDC(&dc);
+	Gameover_p.SelectObject(&bmpGameover_p);
+	dc.BitBlt(m_dino_x, m_dino_y, 80, 80, &Gameover_p, 0, 0, SRCCOPY);
+	Gameover_p.DeleteDC();
+	bmpGameover_p.DeleteObject();
+}
+//장애물 움직임 구현
+void CTRexprojectView::HuddleMove() {
+	static int speed = 0;
+	speed = (m_Huddlespeed / 100) % 5;
+	switch (speed) {
+	case 0:
+		m_tree_x -= 5;
+		break;
+	case 1:
+		m_tree_x -= 7;
+		break;
+	case 2:
+		m_tree_x -= 9;
+		break;
+	case 3:
+		m_tree_x -= 10;
+		break;
+	case 4:
+		m_tree_x -= 12;
 
-void CTRexprojectView::OnLButtonDown(UINT nFlags, CPoint point)
-{
-	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
-	m_jump = true;
-	CView::OnLButtonDown(nFlags, point);
+	}
+	if (m_tree_x <= -40)
+		m_tree_x = 1080;
+	Tree1();
+}
+//충돌 알고리즘
+BOOL CTRexprojectView::CollisionAlgorithm() {
+	m_Gameover_x = false;
+	m_Gameover_y = false;
+	if ((m_dino_x + 3) < (m_tree_x + 27) && (m_dino_x + 58) > m_tree_x)
+		m_Gameover_x = true;
+	if ((m_dino_y - 73) < m_tree_y && m_dino_y > (m_tree_y - 59))
+		m_Gameover_y = true;
+	if (m_Gameover_x && m_Gameover_y) {
+		m_Gameover = true;
+	}
+		return true;
 }
