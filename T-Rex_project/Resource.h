@@ -1,6 +1,6 @@
-﻿//{{NO_DEPENDENCIES}}
-// Microsoft Visual C++에서 생성한 포함 파일입니다.
-// TRexproject.rc에서 사용되고 있습니다.
+//{{NO_DEPENDENCIES}}
+// Microsoft Visual C++?? ??? ?? ?????.
+// TRexproject.rc?? ???? ????.
 //
 #define IDD_ABOUTBOX                    100
 #define IDP_OLE_INIT_FAILED             100

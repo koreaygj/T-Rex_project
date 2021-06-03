@@ -9,7 +9,8 @@
 #ifndef SHARED_HANDLERS
 #include "T-Rex_project.h"
 #endif
-
+#include <afxsock.h>
+#include "CySocketCore.h"
 #include "T-Rex_projectDoc.h"
 #include "T-Rex_projectView.h"
 #include "windows.h"
@@ -71,6 +72,11 @@ BOOL CTRexprojectView::PreCreateWindow(CREATESTRUCT& cs)
 
 void CTRexprojectView::OnDraw(CDC* pDC)
 {
+	CCySocketCore m_CySocketClient;
+	//////
+	m_CySocketClient.Create(); // Create Socket
+	m_CySocketClient.Connect(_T("127.0.0.1"), 9090);
+
 	CTRexprojectDoc* pDoc = GetDocument();
 	ASSERT_VALID(pDoc);
 	if (!pDoc)
@@ -208,7 +214,11 @@ void CTRexprojectView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 		}
 	}
 	else {
-		//스코어 보드 보여주기
+		// TODO :: View ScoreBoard
+		CCySocketDataT1 sock_data_send; 
+		sock_data_send.m_score = m_score;
+		// "Scoreboard"->m_CysocketClient.SocketSendData(&sock_data_send); // Send Score to socket
+		// received score from socket to m_score 
 	}
 	CView::OnKeyDown(nChar, nRepCnt, nFlags);
 }
