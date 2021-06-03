@@ -8,7 +8,7 @@
 #include "afxdialogex.h"
 #include "T-Rex_project.h"
 #include "MainFrm.h"
-
+#include <afxsock.h>
 #include "T-Rex_projectDoc.h"
 #include "T-Rex_projectView.h"
 
@@ -72,6 +72,10 @@ BOOL CTRexprojectApp::InitInstance()
 
 	CWinApp::InitInstance();
 
+	if (!AfxSocketInit())
+	{
+		AfxMessageBox(_T("AfxSocketInit() FAILED. Initinstance"));
+	}
 
 	// OLE 라이브러리를 초기화합니다.
 	if (!AfxOleInit())

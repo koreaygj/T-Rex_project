@@ -183,6 +183,8 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="CySocketCore.h" />
+    <ClInclude Include="CySocketDataT1.h" />
     <ClInclude Include="CDialog.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="MainFrm.h" />
@@ -194,7 +196,10 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CySocketCore.cpp" />
+    <ClCompile Include="CySocketDataT1.cpp" />
     <ClCompile Include="CDialog.cpp" />
+
     <ClCompile Include="MainFrm.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -229,10 +234,14 @@
     <Image Include="res\KakaoTalk_20210529_215640021.bmp" />
     <Image Include="res\KakaoTalk_20210529_215640021_01.bmp" />
     <Image Include="res\KakaoTalk_20210529_215640021_02.bmp" />
+    <Image Include="res\KakaoTalk_20210529_215640021.bmp" />
+    <Image Include="res\KakaoTalk_20210529_215640021_01.bmp" />
+    <Image Include="res\KakaoTalk_20210529_215640021_02.bmp" />
     <Image Include="res\KakaoTalk_20210602_094606636.bmp" />
     <Image Include="res\KakaoTalk_20210602_094606636_01.bmp" />
     <Image Include="res\KakaoTalk_20210602_094609456.bmp" />
     <Image Include="res\KakaoTalk_20210602_094609456_01.bmp" />
+
     <Image Include="res\T-Rex_project.ico" />
     <Image Include="res\T-Rex_projectDoc.ico" />
     <Image Include="res\Toolbar.bmp" />
