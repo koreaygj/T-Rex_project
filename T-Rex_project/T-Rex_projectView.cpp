@@ -13,6 +13,7 @@
 #include "T-Rex_projectDoc.h"
 #include "T-Rex_projectView.h"
 #include "windows.h"
+#include "CDialog.h"
 #pragma comment(lib, "winmm.lib")
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -46,13 +47,17 @@ CTRexprojectView::CTRexprojectView() noexcept
 	m_dino_y = 300;
 	m_ncount = 0;
 	m_Huddlespeed = 0;
+	m_Huddlespeed2 = 0;
 	m_frame = 0.f;
 	m_framespeed = 0.4f;
 	m_jump = false;
 	m_bottom = true;
 	m_Huddlesignal = false;
-	m_tree_x = 1000;m_tree_y = 320;
+	m_huddle_x1 = 1000, m_huddle_y1 = 320;
+	m_huddle_x2 = 1000, m_huddle_y2 = 320;
 	m_Gameover = false;
+	m_Gameoversignal1 = false;
+	m_Gameoversignal2= false;
 }
 
 CTRexprojectView::~CTRexprojectView()
@@ -76,7 +81,7 @@ void CTRexprojectView::OnDraw(CDC* pDC)
 	if (!pDoc)
 		return;
 
-	pDC->TextOutW(10, 10, _T("게임을 시작하려면 space bar 게임을 나오려면 q를 눌러주세요."));
+	//pDC->TextOutW(10, 10, _T("게임을 시작하려면 space bar 게임을 나오려면 q를 눌러주세요."));
 }
 
 
@@ -173,6 +178,7 @@ void CTRexprojectView::OnTimer(UINT_PTR nIDEvent)
 	Line();
 	Moving();
 	HuddleMove();
+	HuddleMove2();
 	CollisionAlgorithm();
 	m_score.Format(_T("%d"), (ncount++ / 10));
 	dc.TextOutW(900, 10, _T("Score :   ") + m_score);
@@ -181,7 +187,9 @@ void CTRexprojectView::OnTimer(UINT_PTR nIDEvent)
 		dc.TextOutW(500, 175, _T("Gameover"));
 		dc.TextOutW(500, 195, _T("Your score: ") + m_score);
 		GameoverPlayer();
-		Tree1();
+		Huddle1();
+		Huddle2();
+		Scorebox();
 		KillTimer(0);
 	}
 }
@@ -244,6 +252,7 @@ void CTRexprojectView::Moving() {
 		m_frame -= changeframe;
 		++m_ncount;
 		++m_Huddlespeed;
+		++m_Huddlespeed2;
 		if (m_ncount >= 2) { m_ncount = 0; }
 	}
 	if (m_ncount == 0)
@@ -284,17 +293,28 @@ void CTRexprojectView::Player2() {
 	memDC2.DeleteDC();
 	bmpPlayer2.DeleteObject();
 }
-//Tree 비트맵 불러오기
 
-void CTRexprojectView::Tree1() {
+//Huddle1 비트맵 불러오기
+void CTRexprojectView::Huddle1() {
 	CClientDC dc(this);
-	CBitmap bmpTree1;
-	bmpTree1.LoadBitmapW(IDB_Tree1);
-	CDC treeDC1; treeDC1.CreateCompatibleDC(&dc);
-	treeDC1.SelectObject(&bmpTree1);
-	dc.BitBlt(m_tree_x, m_tree_y, 54, 59, &treeDC1, 0, 0, SRCCOPY);
-	treeDC1.DeleteDC();
-	bmpTree1.DeleteObject();
+	CBitmap bmpHuddle1;
+	bmpHuddle1.LoadBitmapW(IDB_Huddle1);
+	CDC Huddle1; Huddle1.CreateCompatibleDC(&dc);
+	Huddle1.SelectObject(&bmpHuddle1);
+	dc.BitBlt(m_huddle_x1, m_huddle_y1, 84, 71, &Huddle1, 13, 7, SRCCOPY);
+	Huddle1.DeleteDC();
+	bmpHuddle1.DeleteObject();
+}
+//Huddle2 비트맵 불러오기
+void CTRexprojectView::Huddle2() {
+	CClientDC dc(this);
+	CBitmap bmpHuddle2;
+	bmpHuddle2.LoadBitmapW(IDB_Huddle2);
+	CDC Huddle2; Huddle2.CreateCompatibleDC(&dc);
+	Huddle2.SelectObject(&bmpHuddle2);
+	dc.BitBlt(m_huddle_x2, m_huddle_y2, 128, 72, &Huddle2, 6, 6, SRCCOPY);
+	Huddle2.DeleteDC();
+	bmpHuddle2.DeleteObject();
 }
 //Gameover 비트맵 불러오기
 void CTRexprojectView::GameoverPlayer(){
@@ -313,38 +333,81 @@ void CTRexprojectView::HuddleMove() {
 	speed = (m_Huddlespeed / 100) % 5;
 	switch (speed) {
 	case 0:
-		m_tree_x -= 5;
+		m_huddle_x1 -= 5;
 		break;
 	case 1:
-		m_tree_x -= 7;
+		m_huddle_x1 -= 7;
 		break;
 	case 2:
-		m_tree_x -= 9;
+		m_huddle_x1 -= 9;
 		break;
 	case 3:
-		m_tree_x -= 10;
+		m_huddle_x1 -= 10;
 		break;
 	case 4:
-		m_tree_x -= 12;
+		m_huddle_x1 -= 12;
+		break;
 
 	}
-	if (m_tree_x <= -40)
-		m_tree_x = 1080;
-	Tree1();
+	if (m_huddle_x1 <= -60)
+		m_huddle_x1 = 1080;
+	Huddle1();
+}
+void CTRexprojectView::HuddleMove2() {
+	static int speed2 = 0;
+	speed2 = (m_Huddlespeed2 / 150) % 5;
+	switch (speed2) {
+	case 1:
+		m_huddle_x2 -= 5;
+		break;
+	case 2:
+		m_huddle_x2 -= 7;
+		break;
+	case 3:
+		m_huddle_x2 -= 9;
+		break;
+	case 4:
+		m_huddle_x2 -= 11;
+		break;
+	}
+	if (m_huddle_x2 <= -80)
+		m_huddle_x2 = 1080;
+	Huddle2();
 }
 //충돌 알고리즘
 BOOL CTRexprojectView::CollisionAlgorithm() {
 	m_Gameover_x1 = false;
 	m_Gameover_x2 = false;
 	m_Gameover_y = false;
-	if ((m_dino_x + 3) < (m_tree_x + 27) && (m_dino_x + 58) > m_tree_x)
+	m_Gameoversignal1 = false;
+	m_Gameoversignal2 = false;
+	if ((m_dino_x + 3) < (m_huddle_x1 + 42) && (m_dino_x + 58) > (m_huddle_x1))
 		m_Gameover_x1 = true;
-	if ((m_dino_x + 58) > m_tree_x && (m_dino_x + 3) < m_tree_x + 27)
+	if ((m_dino_x + 58) > (m_huddle_x1) && (m_dino_x + 3) < (m_huddle_x1 + 42))
 		m_Gameover_x2 = true;
-	if ((m_dino_y - 73) < m_tree_y && m_dino_y > (m_tree_y - 59))
+	if ((m_dino_y - 73) < m_huddle_y1 && m_dino_y > (m_huddle_y1 - 71))
 		m_Gameover_y = true;
 	if (m_Gameover_x1 &&m_Gameover_x2 && m_Gameover_y) {
-		m_Gameover = true;
+		m_Gameoversignal1 = true;
 	}
+	if ((m_dino_x + 3) < (m_huddle_x2 + 64) && (m_dino_x + 58) > (m_huddle_x2))
+		m_Gameover_x1 = true;
+	if ((m_dino_x + 58) > (m_huddle_x2) && (m_dino_x + 3) < (m_huddle_x2 + 64))
+		m_Gameover_x2 = true;
+	if ((m_dino_y - 73) < m_huddle_y2 && m_dino_y > (m_huddle_y2 - 72))
+		m_Gameover_y = true;
+	if (m_Gameover_x1 && m_Gameover_x2 && m_Gameover_y) {
+		m_Gameoversignal2 = true;
+	}
+	if (m_Gameoversignal1 || m_Gameoversignal2)
+		m_Gameover = true;
 		return true;
+}
+//점수 입력 대화상자
+void CTRexprojectView::Scorebox() {
+	m_username = (_T("your name"));
+	CDialog dlg;
+	dlg.m_strDialog1 = m_username;
+	if (dlg.DoModal() == IDOK)
+		m_username = dlg.m_strDialog1;
 }

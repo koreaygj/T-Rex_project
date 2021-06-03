@@ -39,6 +39,9 @@
     <ClInclude Include="pch.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="CDialog.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="T-Rex_project.cpp">
@@ -54,6 +57,9 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="pch.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="CDialog.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
@@ -114,6 +120,30 @@
       <Filter>리소스 파일</Filter>
     </Image>
     <Image Include="..\..\..\..\desktop\cbnu 2-1\객체지향\image\bmp00001.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\KakaoTalk_20210602_094606636.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\KakaoTalk_20210602_094606636_01.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\KakaoTalk_20210602_094609456.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\KakaoTalk_20210602_094609456_01.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\KakaoTalk_20210529_215640021_01.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\KakaoTalk_20210529_215640021.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\tree.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\KakaoTalk_20210529_215640021_02.bmp">
       <Filter>리소스 파일</Filter>
     </Image>
   </ItemGroup>
